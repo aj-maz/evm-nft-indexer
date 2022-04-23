@@ -4,8 +4,9 @@ require("./dbs/mongoose.js");
 const mineERC721 = require("./event-miners/erc721");
 
 const socketUrl = "wss://bsc-ws-node.nariox.org:443";
-const rpcUrl = "https://bsc-dataseed.binance.org/"
+const rpcUrl = "https://bsc-dataseed.binance.org/";
 const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
+const SingleEventSaver = require("./lib/SingleEventSaver");
 
 const main = async () => {
   const lastBlock = (await provider.getBlock()).number;
@@ -15,8 +16,18 @@ const main = async () => {
 
   const blockSkip = 5000;
 
-  mineERC721(provider)(contractAddress, startinBlock, lastBlock, 5000, (e) =>
-    console.log(e)
+  mineERC721(provider)(
+    contractAddress,
+    startinBlock,
+    lastBlock,
+    blockSkip,
+    (evs) => {
+      evs.forEach((event) =>
+        SingleEventSaver(event)
+          .then((r) => console.log("event saved"))
+          .catch((err) => console.log(err))
+      );
+    }
   );
 };
 

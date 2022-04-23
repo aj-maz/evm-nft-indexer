@@ -15,10 +15,6 @@ var EventSchema = new mongoose.Schema(
       index: true,
       lowercase: true,
     },
-    eventName: {
-      type: String,
-      required: true,
-    },
     uniqueId: {
       type: String,
       required: true,
