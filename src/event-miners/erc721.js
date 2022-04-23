@@ -6,7 +6,11 @@ const erc721FilterMaker = require("../contractFilters/erc721");
 const MineERC721Events =
   (provider) =>
   async (contractAddress, startingBlock, endingBlock, contractSkip, cb) => {
-    const NFTContract = new ethers.Contract(contractAddress, ERC721.abi, provider);
+    const NFTContract = new ethers.Contract(
+      contractAddress,
+      ERC721.abi,
+      provider
+    );
 
     const queryBatch = async (from, to, skip, attempt = 1) => {
       const sleep = (timeout) =>
@@ -46,7 +50,7 @@ const MineERC721Events =
         const waitTime = 1000 * attempt;
         console.log(`some error happened, will retry in ${waitTime} sec`, err);
         await sleep(waitTime);
-        return queryBatch(from, skip, attempt + 1);
+        return queryBatch(from, to, skip, attempt + 1);
       }
     };
 
