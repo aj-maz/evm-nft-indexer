@@ -31,7 +31,7 @@ const MineERC721Events =
           from + skip - 1
         );
 
-        cb(fileteredEvents);
+        cb(fileteredEvents, { lastFetchedBlock: from + skip - 1 });
 
         const nextFrom = from + skip;
         const nextTo = from + 2 * skip;
